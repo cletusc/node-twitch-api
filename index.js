@@ -87,7 +87,15 @@ TwitchAPI.prototype.api = function (path, options, callback) {
 		if (error) {
 			return callback.call(self, error);
 		}
-		return callback.call(self, null, response.statusCode, (options.json ? JSON.parse(body) : body));
+		if (options.json) {
+			try {
+				body = JSON.parse(body);
+			}
+			catch (error) {
+				return callback.call(self, error);
+			}
+		}
+		return callback.call(self, null, response.statusCode, body);
 	});
 
 	return this;
